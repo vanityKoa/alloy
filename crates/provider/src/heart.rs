@@ -619,7 +619,10 @@ impl<N: Network, S: Stream<Item = N::BlockResponse> + Unpin + 'static> Heartbeat
     fn add_to_waiting_list(&mut self, watcher: TxWatcher, block_height: u64) {
         let confirmations = watcher.config.required_confirmations;
         debug!(tx=%watcher.config.tx_hash, %block_height, confirmations, "adding to waiting list");
-        self.waiting_confs.entry(block_height + confirmations.saturating_sub(1)).or_default().push(watcher);
+        self.waiting_confs
+            .entry(block_height + confirmations.saturating_sub(1))
+            .or_default()
+            .push(watcher);
     }
 
     /// Handle a new block by checking if any of the transactions we're
